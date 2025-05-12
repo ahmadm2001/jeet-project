@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Order Form</title>
+</head>
+<body>
+  <h1>Submit Test Order</h1>
+  <form id="orderForm">
+    <label>Customer ID: <input type="number" name="customer_id" value="1"></label><br>
+    <label>Restaurant ID: <input type="number" name="restaurant_id" value="1"></label><br>
+    <label>Preparation Minutes: <input type="number" name="preparation_minutes" value="15"></label><br>
+    <button type="submit">Send Order</button>
+  </form>
+
+  <pre id="result"></pre>
+
+  <script>
+    const form = document.getElementById('orderForm');
+    const result = document.getElementById('result');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const data = {
+        customer_id: Number(form.customer_id.value),
+        restaurant_id: Number(form.restaurant_id.value),
+        courier_id: null,
+        payment_method: "credit_card",
+        total_price: 49.90,
+        cash_required: 0,
+        preparation_minutes: Number(form.preparation_minutes.value)
+      };
+
+      const res = await fetch('http://localhost:4000/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const json = await res.json();
+      result.textContent = JSON.stringify(json, null, 2);
+    });
+  </script>
+</body>
+</html>
